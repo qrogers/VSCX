@@ -31,11 +31,12 @@ public class OffMapException : UnityException {}
 
 public class Map : MonoBehaviour {
 
+    //public TurnHandler turnHandler;
     public Transform unitHandler;
 
     //Tile Prefab
     public Tile basetile;
-    public Tile baseslant;
+    //public Tile baseslant;
 
     private TileTable tiletable;
 
@@ -110,8 +111,9 @@ public class Map : MonoBehaviour {
     }
 
     public void AttackUnit(Unit unit, Tile tile) {
-        if(tile.GetUnit().GetFaction() != unit.GetFaction()) {
-            tile.GetUnit().RecieveAttack(unit.GetAttack());
+        Unit defender = tile.GetUnit();
+        if(defender.GetFaction() != unit.GetFaction()) {
+            tile.GetUnit().RecieveAttack(unit.GetAttack() - defender.GetDefense() - tile.GetDefenseMod());
         }
     }
 
@@ -129,12 +131,12 @@ public class Map : MonoBehaviour {
 
         tiletable.hill.color = "#333333";
         tiletable.hill.defensemod = 0;
-        tiletable.hill.movepoints = 3;
+        tiletable.hill.movepoints = 2;
         tiletable.tiledata.Add(1, tiletable.hill);
 
         tiletable.fort.color = "#555555";
         tiletable.fort.defensemod = 1;
-        tiletable.fort.movepoints = 2;
+        tiletable.fort.movepoints = 3;
         tiletable.tiledata.Add(2, tiletable.fort);
 
         tiletable.fort.color = "#5555CC";

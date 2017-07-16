@@ -6,9 +6,11 @@ public enum Faction { Player, Enemy }
 
 public class UnitHandler : MonoBehaviour {
 
+    //public AIController aiController;
     public Unit tankPrefab;
 
-    private ArrayList units;
+    private List<Unit> playerUnits;
+    private List<Unit> enemyUnits;
 
     private Dictionary<int, Unit> unitDictionary;
 
@@ -16,9 +18,14 @@ public class UnitHandler : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        units = new ArrayList();
+        playerUnits = new List<Unit>();
+        enemyUnits  = new List<Unit>();
         unitDictionary = new Dictionary<int, Unit>();
         unitDictionary.Add(1, tankPrefab);
+    }
+
+    void Start() {
+        //aiController.UnitAction(units[0]);
     }
 
     public void SpawnUnits(int[] allyUnits, int[] enemyUnits, int width, int height, Map map) {
@@ -32,6 +39,7 @@ public class UnitHandler : MonoBehaviour {
                 int y = tile.GetY();
                 newUnit.Initialize(new Vector3(x - (width / 2), y + 0.70f, (height / 2) - z), new Vector3(x, y, z), Faction.Player, this);
                 tile.SetUnit(newUnit);
+                playerUnits.Add(newUnit);
             }
         }
 
@@ -44,13 +52,32 @@ public class UnitHandler : MonoBehaviour {
                 int y = tile.GetY();
                 newUnit.Initialize(new Vector3(x - (width / 2), y + 0.7f, (height / 2) - z), new Vector3(x, y, z), Faction.Enemy, this);
                 tile.SetUnit(newUnit);
+                this.enemyUnits.Add(newUnit);
             }
         }
+
     }
 
     public void KillUnit(Unit unit) {
-        units.Remove(unit);
+        switch(unit.GetFaction()) {
+            case Faction.Player:
+                playerUnits.Remove(unit);
+                break;
+            case Faction.Enemy:
+                enemyUnits.Remove(unit);
+                break;
+            default:
+                return;
+        }
         map.KillUnit(unit);
+    }
+
+    public List<Unit> GetPlayerUnitsCopy() {
+        return new List<Unit>(playerUnits);
+    }
+
+    public List<Unit> GetEnemyUnitsCopy() {
+        return new List<Unit>(enemyUnits);
     }
 
 }

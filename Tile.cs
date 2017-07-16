@@ -15,7 +15,7 @@ public class Tile : MapObject {
 
     private Color color;
     private int movePoints;
-    private int defensemod;
+    private int defenseMod;
 
     public TravelPath travelPath;
 
@@ -33,7 +33,7 @@ public class Tile : MapObject {
         color = new Color();
         ColorUtility.TryParseHtmlString(data.color, out color);
         movePoints = data.movepoints;
-        defensemod = data.defensemod;
+        defenseMod = data.defensemod;
         //this.slant = slant;
     }
 
@@ -82,8 +82,17 @@ public class Tile : MapObject {
         gameObject.GetComponent<MeshRenderer>().materials = materials;
     }
 
+    public void ClearTravel() {
+        travelPath.count = 0;
+        travelPath.travelpath = null;
+    }
+
     public int GetMovePoints() {
         return movePoints;
+    }
+
+    public int GetDefenseMod() {
+        return defenseMod;
     }
 
     public void SetUnit(Unit unit) {

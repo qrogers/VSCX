@@ -5,23 +5,23 @@ using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour {
 
-    private Text text;
+    public MenuController menuController;
 
-	// Use this for initialization
-	void Start () {
-        text = GetComponent<Text>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    //public Texture borderTexture;
 
-    public void DisplayUnitInfo(Unit unit) {
-        if(unit == null) {
-            text.text = "Null";
-        } else {
-            text.text = unit.unitName + "\n" + unit.GetHealthCurrent().ToString();
-        }
+    //public Material borderMaterial;
+
+    //private string text;
+
+    void OnGUI() {
+        menuController.RenderMenus();
     }
+
+    //public void DisplayUnitInfo(Unit unit) {
+    //    if(unit == null) {
+    //        text = "Null";
+    //    } else {
+    //        text = unit.unitName + "\n" + unit.GetHealthCurrent().ToString();
+    //    }
+    //}
 }

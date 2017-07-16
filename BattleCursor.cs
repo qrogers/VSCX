@@ -27,8 +27,8 @@ public class BattleCursor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         inputDelay -= 1;
-        if(Input.anyKey && inputDelay <= 0) {
-            inputDelay = 10;
+        if(actionHandler.MoveCursor() && inputDelay <= 0) {
+            inputDelay = 6;
             Vector3 cameraLocation = battleCamera.transform.position;
             try {
                 moveAudio.Play();
@@ -47,7 +47,7 @@ public class BattleCursor : MonoBehaviour {
                 }
                 Vector3 tilePosition = currentTile.GetComponent<Transform>().position;
                 transform.position = new Vector3(tilePosition.x, tilePosition.y + 2, tilePosition.z);
-                battleUI.DisplayUnitInfo(currentTile.GetUnit());
+                //battleUI.DisplayUnitInfo(currentTile.GetUnit());
             } catch(OffMapException) { }
 
         }
@@ -64,6 +64,16 @@ public class BattleCursor : MonoBehaviour {
         GetComponentsInChildren<Transform>()[1].Rotate(new Vector3(0.0f, 0.0f, 0.3f));
         Vector3 scale = GetComponentsInChildren<Transform>()[2].localScale;
         GetComponentsInChildren<Transform>()[2].localScale = new Vector3(scale.x * scaleMultiplier, scale.y * scaleMultiplier, scale.z);
+    }
+
+    public void MoveToTile(Tile tile) {
+        currentTile = tile;
+        Vector3 tilePosition = currentTile.GetComponent<Transform>().position;
+        Vector3 movement = tilePosition - transform.position;
+        transform.position = new Vector3(tilePosition.x, tilePosition.y + 2, tilePosition.z);
+        //Vector3 cameraLocation = battleCamera.transform.position;
+        battleCamera.transform.position = new Vector3(battleCamera.transform.position.x + movement.x, battleCamera.transform.position.y, battleCamera.transform.position.z + movement.z);
+        //battleUI.DisplayUnitInfo(currentTile.GetUnit());
     }
 
     public Tile GetCurrentTile() {
